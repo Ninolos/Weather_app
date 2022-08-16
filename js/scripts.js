@@ -52,7 +52,9 @@ function pegarLocalUsuario (lat, long)
 //pegarLocalUsuario(-26.63839410954363, -49.11309933181075)
 
 function pegarCoordenadasDoIP ()
-{  
+{   
+    var lat_padrao = -26.63839410954363;
+    var long_padrao = -49.11309933181075;
 
     $.ajax(
         {
@@ -60,13 +62,22 @@ function pegarCoordenadasDoIP ()
             type: "GET",
             dataType: "json",
             success: function(data)
-            {
-                pegarLocalUsuario(data.geoplugin_latitude, data.geoplugin_longitude);
+            {               
+
+                if (data.geoplugin_latitude && data.geoplugin_longitude)
+                {
+                    pegarLocalUsuario(data.geoplugin_latitude, data.geoplugin_longitude);
+                }
+                else
+                {   
+                    pegarLocalUsuario(lat_padrao, long_padrao);
+                }                
                 
             },
             error: function()
             {
                 console.log("Erro");
+                pegarLocalUsuario(lat_padrao, long_padrao);
             }
         });
 }
