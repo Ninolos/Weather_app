@@ -39,7 +39,7 @@ function pegarLocalUsuario (lat, long)
             success: function(data)
             {
                 var localCode = data.Key;
-                pegarTempoAtual (localCode)
+                pegarTempoAtual (localCode);
                 
             },
             error: function()
@@ -49,6 +49,28 @@ function pegarLocalUsuario (lat, long)
         });
 }
 
-pegarLocalUsuario(-26.63839410954363, -49.11309933181075)
+//pegarLocalUsuario(-26.63839410954363, -49.11309933181075)
+
+function pegarCoordenadasDoIP ()
+{  
+
+    $.ajax(
+        {
+            url : "http://www.geoplugin.net/json.gp",
+            type: "GET",
+            dataType: "json",
+            success: function(data)
+            {
+                pegarLocalUsuario(data.geoplugin_latitude, data.geoplugin_longitude);
+                
+            },
+            error: function()
+            {
+                console.log("Erro");
+            }
+        });
+}
+
+pegarCoordenadasDoIP();
 
 });
