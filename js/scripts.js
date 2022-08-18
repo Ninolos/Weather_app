@@ -11,6 +11,27 @@ $(function(){
 //"http://dataservice.accuweather.com/currentconditions/v1/28143?apikey=uCxMse7d3LYuSZilEeRXALh1BK9Qw6ce&language=pt-br"
 var accuWeatherAPIKey = "uCxMse7d3LYuSZilEeRXALh1BK9Qw6ce"
 
+var weatherObject = 
+{
+    cidade: "",
+    estado: "",
+    pais: "",
+    temperatura: "",
+    texto_clima: "",
+    icone_clima: "",
+};
+
+function preencherClima(cidade, estado, pais, temperatura, texto_clima, icone_clima)
+{
+    var texto_local = cidade + ". " + estado + ". "  + pais;
+    $("#texto_local").text(texto_local);
+
+    $("#texto_clima").text(texto_clima);
+
+    $("#texto_temperatura").html( String(temperatura) + "&deg" );
+}
+
+
 function pegarTempoAtual (localCode)
 {
     $.ajax(
@@ -21,6 +42,12 @@ function pegarTempoAtual (localCode)
             success: function(data)
             {
                 console.log(data);
+
+                weatherObject.temperatura = data[0].Temperature.Metric.Value;
+                weatherObject.texto_clima = data[0].WeatherText;
+                weatherObject.icone_clima = "";
+
+                preencherClima(weatherObject.cidade, weatherObject.estado, weatherObject.pais, weatherObject.temperatura, weatherObject.texto_clima, weatherObject.icone_clima)
             },
             error: function()
             {
@@ -38,6 +65,18 @@ function pegarLocalUsuario (lat, long)
             dataType: "json",
             success: function(data)
             {
+                try 
+                {
+                    weatherObject.cidade = data.ParentCity.LocalizedName;
+                }
+                catch
+                {
+                    weatherObject.cidade = data.LocalizedName;
+                }
+                
+                weatherObject.estado = data.AdministrativeArea.LocalizedName;
+                weatherObject.pais = data.Country.LocalizedName;
+
                 var localCode = data.Key;
                 pegarTempoAtual (localCode);
                 
