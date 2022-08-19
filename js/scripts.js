@@ -37,9 +37,13 @@ function preencherPrevisao5Dias(previsoes)
 {
     $("#info_5dias").html("");
 
+    var diaSemana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado",]
+
     for (var a = 0; a < previsoes.length; a++)
     {
-        var dia_semana = "dia semana";
+        var dataHoje = new Date(previsoes[a].Date);
+
+        var dia_semana = diaSemana[dataHoje.getDay()];
 
         var iconNumber = previsoes[a].Day.Icon <= 9 ? "0" + String(previsoes[a].Day.Icon) : String(previsoes[a].Day.Icon);
 
