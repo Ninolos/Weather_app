@@ -29,6 +29,8 @@ function preencherClima(cidade, estado, pais, temperatura, texto_clima, icone_cl
     $("#texto_clima").text(texto_clima);
 
     $("#texto_temperatura").html( String(temperatura) + "&deg" );
+
+    $("#icone_clima").css("background-image", "url('" + weatherObject.icone_clima + "')");
 }
 
 
@@ -45,7 +47,10 @@ function pegarTempoAtual (localCode)
 
                 weatherObject.temperatura = data[0].Temperature.Metric.Value;
                 weatherObject.texto_clima = data[0].WeatherText;
-                weatherObject.icone_clima = "";
+
+                var iconNumber = data[0].WeatherIcon <= 9 ? "0" + String(data[0].WeatherIcon) : String(data[0].WeatherIcon);
+
+                weatherObject.icone_clima = "https://developer.accuweather.com/sites/default/files/" + iconNumber + "-s.png";
 
                 preencherClima(weatherObject.cidade, weatherObject.estado, weatherObject.pais, weatherObject.temperatura, weatherObject.texto_clima, weatherObject.icone_clima)
             },
