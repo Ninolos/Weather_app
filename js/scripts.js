@@ -31,7 +31,7 @@ function gerarGrafico(horas, temperaturas)
             text: 'Temperatura hora a hora'
         },        
         xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            categories: horas
         },
         yAxis: {
             title: {
@@ -48,14 +48,41 @@ function gerarGrafico(horas, temperaturas)
         },
         series: [{    
             showInLegend: false,      
-            data: [16.0, 18.2, 23.1, 27.9, 32.2, 36.4, 39.8, 38.4, 35.5, 29.2,
-                22.0, 17.8]
+            data: temperaturas
         }]
     });
     
 }
 
+function pegarPrevisaoHoraAHora(localCode) 
+{    
+    $.ajax(
+        {
+            url : "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/" + localCode + "?apikey=" + accuWeatherAPIKey + "&language=pt-br&metric=true",
+            type: "GET",
+            dataType: "json",
+            success: function(data)
+            {
+                var horarios = [];
+                var temperaturas = [];
 
+                for (var a = 0; a < data.length; a++)
+                {
+                    var hora = new Date( data[a].DateTime).getHours();
+                    horarios.push( String(hora) + "h");
+
+                    temperaturas.push( data[a].Temperature.Value )
+
+                    gerarGrafico(horarios, temperaturas)
+                }
+            },
+            error: function()
+            {
+                console.log("Erro");
+            }
+        });
+
+}
 
 function preencherClima(cidade, estado, pais, temperatura, texto_clima, icone_clima)
 {
@@ -178,7 +205,8 @@ function pegarLocalUsuario (lat, long)
 
                 var localCode = data.Key;
                 pegarTempoAtual (localCode);
-                pegarPrevisao5Dias(localCode)
+                pegarPrevisao5Dias(localCode);
+                pegarPrevisaoHoraAHora(localCode) 
                 
             },
             error: function()
@@ -221,6 +249,6 @@ function pegarCoordenadasDoIP ()
         });
 }
 
-//pegarCoordenadasDoIP();
+pegarCoordenadasDoIP();
 
 });
