@@ -21,6 +21,42 @@ var weatherObject =
     icone_clima: "",
 };
 
+function gerarGrafico(horas, temperaturas)
+{
+    Highcharts.chart('hourly_chart', {
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Temperatura hora a hora'
+        },        
+        xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        yAxis: {
+            title: {
+                text: 'Temperatura (°C)'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: [{    
+            showInLegend: false,      
+            data: [16.0, 18.2, 23.1, 27.9, 32.2, 36.4, 39.8, 38.4, 35.5, 29.2,
+                22.0, 17.8]
+        }]
+    });
+    
+}
+
+
+
 function preencherClima(cidade, estado, pais, temperatura, texto_clima, icone_clima)
 {
     var texto_local = cidade + ". " + estado + ". "  + pais;
@@ -185,6 +221,6 @@ function pegarCoordenadasDoIP ()
         });
 }
 
-pegarCoordenadasDoIP();
+//pegarCoordenadasDoIP();
 
 });
